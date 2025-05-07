@@ -1,3 +1,97 @@
+// "use client";
+// import {
+//   Navbar,
+//   NavBody,
+//   NavItems,
+//   MobileNav,
+//   NavbarLogo,
+//   NavbarButton,
+//   MobileNavHeader,
+//   MobileNavToggle,
+//   MobileNavMenu,
+// } from "@/components/ui/resizable-navbar";
+// import { useState } from "react";
+
+// export default function NavbarMain() {
+//   const navItems = [
+//     // {
+//     //   name: "Features",
+//     //   link: "#features",
+//     // },
+//     {
+//       name: "Why OpinionZ?",
+//       link: "#why",
+//     },
+//     // {
+//     //   name: "Contact",
+//     //   link: "#contact",
+//     // },
+//   ];
+
+//   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+//   return (
+//     <div className="fixed w-full z-50">
+//       <Navbar>
+//         {/* Desktop Navigation */}
+//         <NavBody>
+//           <NavbarLogo />
+//           <NavItems items={navItems} />
+//           <div className="flex items-center gap-4">
+//             <NavbarButton variant="secondary" href="/login">Login</NavbarButton>
+//             <NavbarButton variant="primary" href="/signup">Get Started</NavbarButton>
+//           </div>
+//         </NavBody>
+
+//         {/* Mobile Navigation */}
+//         <MobileNav>
+//           <MobileNavHeader>
+//             <NavbarLogo />
+//             <MobileNavToggle
+//               isOpen={isMobileMenuOpen}
+//               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+//             />
+//           </MobileNavHeader>
+
+//           <MobileNavMenu
+//             isOpen={isMobileMenuOpen}
+//             onClose={() => setIsMobileMenuOpen(false)}
+//           >
+//             {navItems.map((item, idx) => (
+//               <a
+//                 key={`mobile-link-${idx}`}
+//                 href={item.link}
+//                 onClick={() => setIsMobileMenuOpen(false)}
+//                 className="relative text-neutral-600 dark:text-neutral-300"
+//               >
+//                 <span className="block">{item.name}</span>
+//               </a>
+//             ))}
+//             <div className="flex w-full flex-col gap-4">
+//               <NavbarButton
+//                 onClick={() => setIsMobileMenuOpen(false)}
+//                 variant="primary"
+//                 className="w-full"
+//               >
+//                 Login
+//               </NavbarButton>
+//               <NavbarButton
+//                 onClick={() => setIsMobileMenuOpen(false)}
+//                 variant="primary"
+//                 className="w-full"
+//               >
+//                 Get Started
+//               </NavbarButton>
+//             </div>
+//           </MobileNavMenu>
+//         </MobileNav>
+//       </Navbar>
+//     </div>
+//   );
+// };
+
+
+
 "use client";
 import {
   Navbar,
@@ -10,12 +104,46 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { FaUserCircle } from "react-icons/fa";
+import { useAuth } from "@/context/AuthContext"; // Corrected import path
 
-export default function Nav() {
-
+export default function NavbarMain() {
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isLoggedIn, logout } = useAuth();  // Accessing the context
+
+  const navItems = [
+    // { name: "Why OpinionZ?", link: "#why" },
+  ];
+
+  // ✅ Logout logic
+  async function handleLogout(e) {
+    e?.preventDefault();
+
+    try {
+      const res = await fetch("http://localhost:8080/api/v1/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        console.log("Logout successful");
+        logout(); // Update the context state to reflect the logout
+        router.push("/login");
+      } else {
+        console.error("Logout failed:", data.message);
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  }
 
   return (
     <div className="fixed w-full z-50">
@@ -23,27 +151,37 @@ export default function Nav() {
         {/* Desktop Navigation */}
         <NavBody>
           <NavbarLogo />
-          {/* <NavItems items={navItems} /> */}
-          {/* hihihihih */}
-          <form className="w-full relative lg:w-1/2 flex md:flex-row flex-col gap-4 items-center justify-center ">
-          <input
-            type="text"
-            placeholder="Sign up to get started"
-            className="w-full px-4 py-2 border text-xl border-neutral-700 rounded-full focus:outline focus:ring-neutral-300"
-          />
-          <button className="w-auto h-auto cursor-pointer absolute right-1">
-            <DotLottieReact
-              src="https://lottie.host/063ed933-b407-41aa-a21d-f84f272a70c4/n7hRn0IduF.lottie"
-              loop
-              autoplay
-              className="bg-white rounded-full w-10 h-10 bg-cover  cursor-pointer"
-            />
-          </button>
-        </form>
+          <NavItems items={navItems} />
 
           <div className="flex items-center gap-4">
-            {/* <NavbarButton variant="secondary" href="/login">Login</NavbarButton> */}
-            <NavbarButton variant="primary" href="#">Get Started</NavbarButton>
+            {isLoggedIn ? (
+              <div className="relative group">
+                <FaUserCircle className="text-3xl cursor-pointer text-neutral-700 dark:text-white" />
+                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-neutral-800 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                  <a
+                    href="/dashboard"
+                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                  >
+                    Profile
+                  </a>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <NavbarButton variant="secondary" href="/login">
+                  Login
+                </NavbarButton>
+                <NavbarButton variant="primary" href="/signup">
+                  Get Started
+                </NavbarButton>
+              </>
+            )}
           </div>
         </NavBody>
 
@@ -61,22 +199,58 @@ export default function Nav() {
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
           >
-            {/* hihihi */}
-            <div className="flex w-full flex-col gap-4">
-              <NavbarButton
+            {navItems.map((item, idx) => (
+              <a
+                key={`mobile-link-${idx}`}
+                href={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
+                className="relative text-neutral-600 dark:text-neutral-300"
               >
-                Login
-              </NavbarButton>
-              <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Get Started
-              </NavbarButton>
+                <span className="block">{item.name}</span>
+              </a>
+            ))}
+
+            <div className="flex w-full flex-col gap-4 mt-4">
+              {isLoggedIn ? (
+                <>
+                  <NavbarButton
+                    href="/dashboard"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    variant="primary"
+                    className="w-full"
+                  >
+                    Profile
+                  </NavbarButton>
+                  <button
+                    onClick={async (e) => {
+                      await handleLogout(e);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <NavbarButton
+                    href="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    variant="primary"
+                    className="w-full"
+                  >
+                    Login
+                  </NavbarButton>
+                  <NavbarButton
+                    href="/signup"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    variant="primary"
+                    className="w-full"
+                  >
+                    Get Started
+                  </NavbarButton>
+                </>
+              )}
             </div>
           </MobileNavMenu>
         </MobileNav>

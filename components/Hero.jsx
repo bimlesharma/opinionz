@@ -26,89 +26,89 @@ import { motion } from "framer-motion";
 export function Hero() {
   return (
     <div className="sticky top-0 w-full dark:bg-neutral-90 shadow-sm">
-      <Nav />
+      {/* <Nav /> */}
       <Main />
     </div>
   );
 }
 
-export function Nav() {
-  const navItems = [
-    // {
-    //   name: "Features",
-    //   link: "#features",
-    // },
-    {
-      name: "Why OpinionZ?",
-      link: "#why",
-    },
-    // {
-    //   name: "Contact",
-    //   link: "#contact",
-    // },
-  ];
+// export function Nav() {
+//   const navItems = [
+//     // {
+//     //   name: "Features",
+//     //   link: "#features",
+//     // },
+//     {
+//       name: "Why OpinionZ?",
+//       link: "#why",
+//     },
+//     // {
+//     //   name: "Contact",
+//     //   link: "#contact",
+//     // },
+//   ];
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+//   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  return (
-    <div className="fixed w-full z-50">
-      <Navbar>
-        {/* Desktop Navigation */}
-        <NavBody>
-          <NavbarLogo />
-          <NavItems items={navItems} />
-          <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary" href="/login">Login</NavbarButton>
-            <NavbarButton variant="primary" href="/signup">Get Started</NavbarButton>
-          </div>
-        </NavBody>
+//   return (
+//     <div className="fixed w-full z-50">
+//       <Navbar>
+//         {/* Desktop Navigation */}
+//         <NavBody>
+//           <NavbarLogo />
+//           <NavItems items={navItems} />
+//           <div className="flex items-center gap-4">
+//             <NavbarButton variant="secondary" href="/login">Login</NavbarButton>
+//             <NavbarButton variant="primary" href="/signup">Get Started</NavbarButton>
+//           </div>
+//         </NavBody>
 
-        {/* Mobile Navigation */}
-        <MobileNav>
-          <MobileNavHeader>
-            <NavbarLogo />
-            <MobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
-          </MobileNavHeader>
+//         {/* Mobile Navigation */}
+//         <MobileNav>
+//           <MobileNavHeader>
+//             <NavbarLogo />
+//             <MobileNavToggle
+//               isOpen={isMobileMenuOpen}
+//               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+//             />
+//           </MobileNavHeader>
 
-          <MobileNavMenu
-            isOpen={isMobileMenuOpen}
-            onClose={() => setIsMobileMenuOpen(false)}
-          >
-            {navItems.map((item, idx) => (
-              <a
-                key={`mobile-link-${idx}`}
-                href={item.link}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300"
-              >
-                <span className="block">{item.name}</span>
-              </a>
-            ))}
-            <div className="flex w-full flex-col gap-4">
-              <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Login
-              </NavbarButton>
-              <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Get Started
-              </NavbarButton>
-            </div>
-          </MobileNavMenu>
-        </MobileNav>
-      </Navbar>
-    </div>
-  );
-}
+//           <MobileNavMenu
+//             isOpen={isMobileMenuOpen}
+//             onClose={() => setIsMobileMenuOpen(false)}
+//           >
+//             {navItems.map((item, idx) => (
+//               <a
+//                 key={`mobile-link-${idx}`}
+//                 href={item.link}
+//                 onClick={() => setIsMobileMenuOpen(false)}
+//                 className="relative text-neutral-600 dark:text-neutral-300"
+//               >
+//                 <span className="block">{item.name}</span>
+//               </a>
+//             ))}
+//             <div className="flex w-full flex-col gap-4">
+//               <NavbarButton
+//                 onClick={() => setIsMobileMenuOpen(false)}
+//                 variant="primary"
+//                 className="w-full"
+//               >
+//                 Login
+//               </NavbarButton>
+//               <NavbarButton
+//                 onClick={() => setIsMobileMenuOpen(false)}
+//                 variant="primary"
+//                 className="w-full"
+//               >
+//                 Get Started
+//               </NavbarButton>
+//             </div>
+//           </MobileNavMenu>
+//         </MobileNav>
+//       </Navbar>
+//     </div>
+//   );
+// };
 
 const Main = () => {
   return (

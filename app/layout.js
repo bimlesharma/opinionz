@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider"
+import Navbar from "@/components/Navbar";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "OpinionZ",
   description: "Share Your Opinion Anonymously",
+  icons: {
+    icon: "/logo.png", 
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -22,15 +27,17 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      ><AuthProvider>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
+            <Navbar />
         {children}
         </ThemeProvider>
+      </AuthProvider>
       </body>
     </html>
   );

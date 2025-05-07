@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { NavbarButton } from "@/components/ui/resizable-navbar";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function Login() {
 
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+    const { setIsLoggedIn } = useAuth();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,7 +43,8 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        router.push("/dashboard");
+          setIsLoggedIn(true); // Update the context state
+          router.push("/");
       } else {
         setError(data.message || "Login failed");
       }
