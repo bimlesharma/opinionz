@@ -8,7 +8,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post }, props) => {
   const [upvotes, setUpvotes] = useState(post.upvotes_user_ids?.length || 0);
   const [downvotes, setDownvotes] = useState(post.downvotes_user_ids?.length || 0);
   const [loading, setLoading] = useState(false);

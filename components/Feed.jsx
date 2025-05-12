@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import PostCard from "@/components/PostCard";
 import { useRouter } from "next/navigation";
+import {NavbarButton} from "@/components/ui/resizable-navbar";
 
 export default function DashboardPage() {
   const [posts, setPosts] = useState([]);
@@ -12,9 +13,12 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/v1/recommended-posts", {
-          credentials: "include",
-        });
+        const res = await fetch(
+          "http://localhost:8080/api/v1/recommended-posts",
+          {
+            credentials: "include",
+          }
+        );
 
         const data = await res.json();
 
@@ -35,16 +39,22 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 pt-20 px-4 max-w-7xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 gap-6 pt-20 px-4 max-w-7xl mx-auto">
       {/* Left Sidebar */}
-      <div className="sticky hidden md:block top-20 h-fit bg-neutral-900 p-6 rounded-lg shadow-md space-y-6">
-        <h1 className="text-2xl font-bold">Trending</h1>
-        <h1 className="text-2xl font-bold">News</h1>
-        <h1 className="text-2xl font-bold">My Interests</h1>
+      <div className="sticky hidden lg:block top-20 h-fit bg-neutral-900 p-6 rounded-lg shadow-md space-y-6">
+        <h1 className="text-2xl font-bold mb-6">Menu</h1>
+        <NavbarButton
+          href="/create-post"
+          onClick={() => setIsMobileMenuOpen(false)}
+          variant="primary"
+          className="w-full"
+        >
+          Create Post
+        </NavbarButton>
       </div>
 
       {/* Feed */}
-      <div className="col-span-1 md:col-span-2 bg-neutral-900 p-6 rounded-lg shadow-md">
+      <div className="col-span-1 lg:col-span-2 bg-neutral-900 p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-6">Feed</h1>
 
         {loading ? (
@@ -74,15 +84,16 @@ export default function DashboardPage() {
       </div>
 
       {/* Right Sidebar */}
-      <div className="hidden md:block sticky top-20 h-fit bg-neutral-900 p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-6">Your Hashtags</h1>
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-4">
-            <div>
-              <h2 className="text-lg font-semibold bg-neutral-700 py-2 px-6 rounded-sm">#Temp Data</h2>
-            </div>
-          </div>
-        </div>
+      <div className="hidden lg:block sticky top-20 h-fit bg-neutral-900 p-6 rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold mb-6">User</h1>
+        <NavbarButton
+          href="/profile"
+          onClick={() => setIsMobileMenuOpen(false)}
+          variant="primary"
+          className="w-full"
+        >
+          My Profile
+        </NavbarButton>
       </div>
     </div>
   );

@@ -55,7 +55,7 @@ export default function CreatePost() {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="p-6 max-w-xl mx-auto pt-20">
       <h1 className="text-2xl font-bold mb-4">Create Post</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <textarea
@@ -83,13 +83,13 @@ export default function CreatePost() {
           <span>Post Anonymously</span>
         </label>
 
-        <input
+        {/* <input
           type="text"
           placeholder="Doodle (optional URL)"
           className="w-full border px-3 py-2 rounded"
           value={doodle}
           onChange={(e) => setDoodle(e.target.value)}
-        />
+        /> */}
 
         <div className="space-y-2">
           <label className="block font-medium">Image URLs</label>

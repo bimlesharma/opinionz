@@ -1,95 +1,3 @@
-// "use client";
-// import {
-//   Navbar,
-//   NavBody,
-//   NavItems,
-//   MobileNav,
-//   NavbarLogo,
-//   NavbarButton,
-//   MobileNavHeader,
-//   MobileNavToggle,
-//   MobileNavMenu,
-// } from "@/components/ui/resizable-navbar";
-// import { useState } from "react";
-
-// export default function NavbarMain() {
-//   const navItems = [
-//     // {
-//     //   name: "Features",
-//     //   link: "#features",
-//     // },
-//     {
-//       name: "Why OpinionZ?",
-//       link: "#why",
-//     },
-//     // {
-//     //   name: "Contact",
-//     //   link: "#contact",
-//     // },
-//   ];
-
-//   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-//   return (
-//     <div className="fixed w-full z-50">
-//       <Navbar>
-//         {/* Desktop Navigation */}
-//         <NavBody>
-//           <NavbarLogo />
-//           <NavItems items={navItems} />
-//           <div className="flex items-center gap-4">
-//             <NavbarButton variant="secondary" href="/login">Login</NavbarButton>
-//             <NavbarButton variant="primary" href="/signup">Get Started</NavbarButton>
-//           </div>
-//         </NavBody>
-
-//         {/* Mobile Navigation */}
-//         <MobileNav>
-//           <MobileNavHeader>
-//             <NavbarLogo />
-//             <MobileNavToggle
-//               isOpen={isMobileMenuOpen}
-//               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-//             />
-//           </MobileNavHeader>
-
-//           <MobileNavMenu
-//             isOpen={isMobileMenuOpen}
-//             onClose={() => setIsMobileMenuOpen(false)}
-//           >
-//             {navItems.map((item, idx) => (
-//               <a
-//                 key={`mobile-link-${idx}`}
-//                 href={item.link}
-//                 onClick={() => setIsMobileMenuOpen(false)}
-//                 className="relative text-neutral-600 dark:text-neutral-300"
-//               >
-//                 <span className="block">{item.name}</span>
-//               </a>
-//             ))}
-//             <div className="flex w-full flex-col gap-4">
-//               <NavbarButton
-//                 onClick={() => setIsMobileMenuOpen(false)}
-//                 variant="primary"
-//                 className="w-full"
-//               >
-//                 Login
-//               </NavbarButton>
-//               <NavbarButton
-//                 onClick={() => setIsMobileMenuOpen(false)}
-//                 variant="primary"
-//                 className="w-full"
-//               >
-//                 Get Started
-//               </NavbarButton>
-//             </div>
-//           </MobileNavMenu>
-//         </MobileNav>
-//       </Navbar>
-//     </div>
-//   );
-// };
-
 "use client";
 import {
   Navbar,
@@ -110,7 +18,8 @@ import { useAuth } from "@/context/AuthContext"; // Corrected import path
 export default function NavbarMain() {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isLoggedIn, logout } = useAuth(); // Accessing the context
+  const { isLoggedIn, logout, dp, isAdmin } = useAuth(); // Accessing the context
+  // console.log(dp);
 
   const navItems = [
     // { name: "Why OpinionZ?", link: "#why" },
@@ -141,7 +50,7 @@ export default function NavbarMain() {
     } catch (error) {
       console.error("Error during logout:", error);
     }
-  };
+  }
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -161,7 +70,13 @@ export default function NavbarMain() {
             {isLoggedIn ? (
               <div className="relative group">
                 <div className="relative group" onClick={handleToggleDropdown}>
-                <FaUserCircle className="text-3xl cursor-pointer text-neutral-700 dark:text-white" />
+                  {dp && (
+                    <img
+                      alt="dp"
+                      src={dp}
+                      className="w-10 h-10 object-cover rounded-full cursor-pointer text-neutral-700 dark:text-white"
+                    />
+                  )}
                   <div
                     id="dropdown"
                     className={`${
@@ -174,6 +89,14 @@ export default function NavbarMain() {
                     >
                       Profile
                     </a>
+                    {isAdmin && (
+                      <a
+                        href="/admin"
+                        className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                      >
+                        Admin Dashboard
+                      </a>
+                    )}
                     <button
                       onClick={handleLogout}
                       className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-neutral-700"
@@ -232,6 +155,17 @@ export default function NavbarMain() {
                   >
                     Profile
                   </NavbarButton>
+                  {isAdmin && (
+                    <NavbarButton
+                      href="/admin"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      variant="primary"
+                      className="w-full"
+                    >
+                      Admin Dashboard
+                    </NavbarButton>
+                  )}
+
                   <button
                     onClick={async (e) => {
                       await handleLogout(e);

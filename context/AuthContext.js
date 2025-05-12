@@ -19,6 +19,8 @@ export const useAuth = () => {
 // AuthProvider component
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [dp, setDp] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
   // Check if the user is logged in when the component mounts
@@ -29,6 +31,10 @@ export const AuthProvider = ({ children }) => {
           credentials: "include", // Make sure cookies are included
         });
         setIsLoggedIn(res.ok); // Update the state based on the response
+        const data = await res.json();
+        console.log("User profile data:", data.data.user.role);
+        setDp(data.data.user.doodle); // Set the profile picture URL
+        setIsAdmin(data.data.user.role === "admin"); // Check if the user is an admin
       } catch (error) {
         setIsLoggedIn(false); // Handle error
       }
@@ -62,7 +68,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, logout , dp, isAdmin}}>
       {children}
     </AuthContext.Provider>
   );
