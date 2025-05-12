@@ -21,6 +21,7 @@ export default function DashboardPage() {
         );
 
         const data = await res.json();
+        console.log("Response data:", data);
 
         if (res.ok && data.success) {
           setPosts(data.data);

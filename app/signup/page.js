@@ -79,6 +79,8 @@ export default function Signup() {
           email: form.email,
           contact: form.contact,
           password: form.password,
+          interests: ["default"],
+          doodle: "/logo.png",
         }),
       });
   

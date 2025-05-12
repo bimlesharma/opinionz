@@ -9,6 +9,7 @@ export default function CreatePost() {
   const [doodle, setDoodle] = useState("");
   const [images, setImages] = useState([""]);
   const [loading, setLoading] = useState(false);
+  const defaultTags = ["default"];
 
   const router = useRouter();
 
@@ -26,7 +27,7 @@ export default function CreatePost() {
       credentials: "include",
       body: JSON.stringify({
         content,
-        tags: tagArray,
+        tags: [...defaultTags, ...tagArray],
         anonymous,
         doodle,
         images: images.filter((img) => img.trim() !== ""),

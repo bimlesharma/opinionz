@@ -192,66 +192,6 @@ export default function Profile() {
             You haven't posted anything yet.
           </p>
         ) : (
-          // (
-          //   <div className="space-y-6">
-          //     {posts.map((postData, index) => (
-          //       <div
-          //         key={index}
-          //         className="bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg p-4"
-          //       >
-          //         <p className="text-neutral-800 dark:text-white mb-2">
-          //           <strong>Content:</strong> {postData?.post?.content ?? "N/A"}
-          //         </p>
-          //         <p className="text-neutral-700 dark:text-neutral-300">
-          //           <strong>Tags:</strong>{" "}
-          //           {(postData?.post?.tags ?? []).length > 0
-          //             ? postData?.post?.tags.join(", ")
-          //             : "-"}
-          //         </p>
-          //         {postData?.post?.images?.length > 0 && (
-          //           <div className="mt-4">
-          //             <strong className="text-neutral-800 dark:text-white">
-          //               Images:
-          //             </strong>
-          //             <div className="flex space-x-2 mt-2">
-          //               {postData.post.images.map((image, idx) => (
-          //                 <img
-          //                   key={idx}
-          //                   src={image}
-          //                   alt={`Post image ${idx}`}
-          //                   className="w-24 h-24 object-cover rounded-lg"
-          //                 />
-          //               ))}
-          //             </div>
-          //           </div>
-          //         )}
-          //         <p className="text-neutral-700 dark:text-neutral-300">
-          //           <strong>Upvotes:</strong> {postData.upvotes ?? 0}
-          //         </p>
-          //         <p className="text-neutral-700 dark:text-neutral-300 mb-2">
-          //           <strong>Downvotes:</strong> {postData.downvotes ?? 0}
-          //         </p>
-          //         <div>
-          //           <strong className="text-neutral-800 dark:text-white">
-          //             Comments:
-          //           </strong>
-          //           {Array.isArray(postData?.comments) &&
-          //           postData.comments.length > 0 ? (
-          //             <ul className="list-disc list-inside text-neutral-700 dark:text-neutral-300 mt-1">
-          //               {postData.comments.map((comment, idx) => (
-          //                 <li key={idx}>{comment.content}</li>
-          //               ))}
-          //             </ul>
-          //           ) : (
-          //             <p className="text-sm text-neutral-500 dark:text-neutral-400 italic">
-          //               No comments yet.
-          //             </p>
-          //           )}
-          //         </div>
-          //       </div>
-          //     ))}
-          //   </div>
-          // )
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {posts.map(({ post }, index) => (
               <div

@@ -31,7 +31,7 @@ export default function AdminUsersPage() {
 
     if (res.success) {
       alert("User deleted successfully.");
-      setUsers(users.filter((user) => user._id !== id));
+      setUsers(users.filter((user) => user.user_id !== id));
     } else {
       alert("Error deleting user.");
     }
@@ -56,7 +56,7 @@ export default function AdminUsersPage() {
           >
             <div className="flex items-center mb-4 ">
               <img
-                src={user.doodle}
+                src={user.doodle || "/logo.png"}
                 alt="User Avatar"
                 className={`w-40 h-40 object-cover rounded-full border-4 ${user.role === "admin" ? "border-blue-500": "border-neutral-50"}`}
               />
@@ -78,7 +78,7 @@ export default function AdminUsersPage() {
             </div>
             <h2>Interests:</h2>
             <div className="flex flex-wrap gap-2 mb-4">
-              {user.interests.map((interest, index) => (
+              {user.interests?.map((interest, index) => (
                 <span
                   key={`${user.user_id}-${index}`}
                   className="bg-gray-200 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full"

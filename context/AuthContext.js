@@ -58,7 +58,6 @@ export const AuthProvider = ({ children }) => {
 
       if (res.ok && data.success) {
         setIsLoggedIn(false);
-        router.push("/login"); // Redirect to login page after successful logout
       } else {
         console.error("Logout failed:", data.message);
       }

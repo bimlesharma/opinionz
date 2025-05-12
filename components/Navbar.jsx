@@ -70,12 +70,14 @@ export default function NavbarMain() {
             {isLoggedIn ? (
               <div className="relative group">
                 <div className="relative group" onClick={handleToggleDropdown}>
-                  {dp && (
+                  {dp ? (
                     <img
                       alt="dp"
                       src={dp}
-                      className="w-10 h-10 object-cover rounded-full cursor-pointer text-neutral-700 dark:text-white"
+                      className="w-10 border border-white h-10 object-cover rounded-full cursor-pointer text-neutral-700 dark:text-white"
                     />
+                  ):(
+                    <FaUserCircle className="w-8 h-8 text-neutral-700 dark:text-white cursor-pointer" />
                   )}
                   <div
                     id="dropdown"
@@ -147,6 +149,14 @@ export default function NavbarMain() {
             <div className="flex w-full flex-col gap-4 mt-4">
               {isLoggedIn ? (
                 <>
+                  <NavbarButton
+                    href="/create-post"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    variant="primary"
+                    className="w-full"
+                  >
+                    Create Post
+                  </NavbarButton>
                   <NavbarButton
                     href="/profile"
                     onClick={() => setIsMobileMenuOpen(false)}
