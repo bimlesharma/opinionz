@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/v1/me", {
+        const res = await fetch("http://localhost:8080/api/v1/user-profile", {
           credentials: "include", // Make sure cookies are included
         });
         setIsLoggedIn(res.ok); // Update the state based on the response

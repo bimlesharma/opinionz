@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { NavbarButton } from "@/components/ui/resizable-navbar";
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 
 export default function Signup() {
@@ -60,10 +61,13 @@ export default function Signup() {
   
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     if (!validateForm()) return;
+    setLoading(true);
+  
   
     try {
       const response = await fetch("http://localhost:8080/api/v1/register", {
@@ -82,19 +86,22 @@ export default function Signup() {
   
       if (response.ok && data.success) {
         console.log("User created:", data.data);
-        // Redirect to verification page
+        toast.success("Signup successful! Verify your email.");
         router.push(`/verify?email=${encodeURIComponent(form.email)}`);
       } else if (data.message === "User already exists and is verified.") {
-        console.log("User :", data.data, "already exists and is verified.");
+        toast.error("User already verified. Please log in.");
+        // console.log("User :", data.data, "already exists and is verified.");
         // Redirect to verification page
         router.push(`/login`);
       } else {
-        console.error("Registration failed:", data.message);
-        // Optionally show error in UI
+        // console.error("Registration failed:", data.message);
+        toast.error(data.message || "Registration failed");
       }
     } catch (error) {
-      console.error("Error submitting registration form:", error);
-      // Optionally show error in UI
+      // console.error("Error submitting registration form:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };  
 
@@ -171,8 +178,8 @@ export default function Signup() {
             )}
           </div>
 
-          <button type="submit" className="w-full">
-            <NavbarButton className="w-full">Sign Up</NavbarButton>
+          <button type="submit" className="w-full" disabled={loading}>
+            <NavbarButton className="w-full">{loading ? "Signing up..." : "Sign Up"}</NavbarButton>
           </button>
         </form>
 

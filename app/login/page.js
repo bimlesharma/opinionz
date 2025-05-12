@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { NavbarButton } from "@/components/ui/resizable-navbar";
 import { useAuth } from "@/context/AuthContext";
+import toast from 'react-hot-toast';
+
 
 export default function Login() {
   const router = useRouter();
@@ -24,8 +26,10 @@ export default function Login() {
     setError("");
   };
 
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await fetch("http://localhost:8080/api/v1/login", {
@@ -44,12 +48,18 @@ export default function Login() {
 
       if (res.ok && data.success) {
           setIsLoggedIn(true); // Update the context state
+          toast.success("Logged in successfully!");
           router.push("/");
       } else {
         setError(data.message || "Login failed");
+        toast.error(data.message || "Login failed");
+        console.error("Login error:", data.message);
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,8 +116,8 @@ export default function Login() {
             <p className="text-red-500 text-sm mt-1 text-center">{error}</p>
           )}
 
-          <button type="submit" className="w-full">
-            <NavbarButton className="w-full">Login</NavbarButton>
+          <button type="submit" className="w-full" disabled={loading}>
+            <NavbarButton className="w-full">{loading ? "Logging in..." : "Login"}</NavbarButton>
           </button>
         </form>
 

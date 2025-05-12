@@ -2,6 +2,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { NavbarButton } from "@/components/ui/resizable-navbar";
+import { toast } from "react-hot-toast";
 
 const VerifyPage = () => {
   const searchParams = useSearchParams();
@@ -12,7 +13,7 @@ const VerifyPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
-  const [emailInput, setEmailInput] = useState(email); // Make email editable
+  const [emailInput, setEmailInput] = useState(email || ""); // Make email editable
 
   const handleVerify = async () => {
     if (!otp.trim()) {
@@ -36,17 +37,20 @@ const VerifyPage = () => {
   
       if (response.ok && data.success) {
         console.log("OTP verified:", data);
+        toast.success("Email verified successfully!");
         router.push("/login");
         return; // ✅ Prevents further execution
       } 
       
       if (data.message?.toLowerCase().includes("already verified")) {
-        console.log("User already verified:", data);
+        // console.log("User already verified:", data);
+        toast.error("User already verified. Please log in.");
         router.push("/login");
         return; // ✅ Prevents setLoading or setError from firing
       }
   
-      setError(data.message || "OTP verification failed");
+      // setError(data.message || "OTP verification failed");
+      toast.error(data.message || "OTP verification failed");
     } catch (err) {
       console.error("Verification error:", err);
       setError("An error occurred while verifying OTP.");
@@ -57,6 +61,11 @@ const VerifyPage = () => {
   
   
   const handleResend = async () => {
+    if (!emailInput.trim()) {
+      toast.error("Please enter your email.");
+      setResendLoading(false);
+      return;
+    }
     setResendLoading(true);
     setError("");
 
@@ -74,13 +83,16 @@ const VerifyPage = () => {
 
       if (response.ok && data.success) {
         console.log("OTP resent:", data);
+        toast.success("OTP has been resent!");
         setError(""); // Clear any previous errors
       } else {
-        setError(data.message || "Failed to resend OTP.");
+        // setError(data.message || "Failed to resend OTP.");
+        toast.error(data.message || "Failed to resend OTP.");
       }
     } catch (err) {
       console.error("Resend error:", err);
-      setError("An error occurred while resending OTP.");
+      // setError("An error occurred while resending OTP.");
+      toast.error("An error occurred while resending OTP.");
     } finally {
       setResendLoading(false);
     }
@@ -120,8 +132,8 @@ const VerifyPage = () => {
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           </div>
 
-          <button type="submit" className="w-full">
-            <NavbarButton className="w-full">Verify</NavbarButton>
+          <button type="submit" className="w-full" disabled={loading}>
+            <NavbarButton className="w-full">{loading ? "Verifying..." : "Verify"}</NavbarButton>
           </button>
         </form>
 
@@ -130,8 +142,9 @@ const VerifyPage = () => {
           <button
             onClick={handleResend}
             className="text-white font-bold hover:underline"
+            disabled={resendLoading}
           >
-            Resend OTP
+            {resendLoading ? "Resending..." : "Resend OTP"}
           </button>
         </p>
       </div>

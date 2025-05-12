@@ -90,8 +90,6 @@
 //   );
 // };
 
-
-
 "use client";
 import {
   Navbar,
@@ -112,7 +110,7 @@ import { useAuth } from "@/context/AuthContext"; // Corrected import path
 export default function NavbarMain() {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isLoggedIn, logout } = useAuth();  // Accessing the context
+  const { isLoggedIn, logout } = useAuth(); // Accessing the context
 
   const navItems = [
     // { name: "Why OpinionZ?", link: "#why" },
@@ -143,7 +141,13 @@ export default function NavbarMain() {
     } catch (error) {
       console.error("Error during logout:", error);
     }
-  }
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <div className="fixed w-full z-50">
@@ -156,20 +160,27 @@ export default function NavbarMain() {
           <div className="flex items-center gap-4">
             {isLoggedIn ? (
               <div className="relative group">
+                <div className="relative group" onClick={handleToggleDropdown}>
                 <FaUserCircle className="text-3xl cursor-pointer text-neutral-700 dark:text-white" />
-                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-neutral-800 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
-                  <a
-                    href="/dashboard"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                  <div
+                    id="dropdown"
+                    className={`${
+                      isOpen ? "block" : "hidden"
+                    } absolute right-0 mt-2 w-40 bg-white dark:bg-neutral-800 rounded shadow-lg transition-opacity duration-300 z-50`}
                   >
-                    Profile
-                  </a>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-neutral-700"
-                  >
-                    Logout
-                  </button>
+                    <a
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                    >
+                      Profile
+                    </a>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-neutral-700"
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -214,7 +225,7 @@ export default function NavbarMain() {
               {isLoggedIn ? (
                 <>
                   <NavbarButton
-                    href="/dashboard"
+                    href="/profile"
                     onClick={() => setIsMobileMenuOpen(false)}
                     variant="primary"
                     className="w-full"
@@ -226,7 +237,7 @@ export default function NavbarMain() {
                       await handleLogout(e);
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
+                    className="w-full bg-neutral-600 text-white px-4 py-2 rounded-full hover:bg-red-600"
                   >
                     Logout
                   </button>
