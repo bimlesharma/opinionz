@@ -121,13 +121,13 @@ const PostCard = ({ post }) => {
         <div className="flex items-center justify-between mt-4">
           <button
             onClick={() => handleVote("upvote")}
-            className="text-green-500 hover:text-green-700"
+            className="text-green-500 hover:text-green-700 cursor-pointer"
           >
             Upvote {upvotes}
           </button>
           <button
             onClick={() => handleVote("downvote")}
-            className="text-red-500 hover:text-red-700"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
           >
             Downvote {downvotes}
           </button>
